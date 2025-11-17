@@ -1,0 +1,51 @@
+# ---- Python ----
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.pyo
+*.pyd
+*.pdb
+*.sqlite3
+
+# ---- Virtual Environments ----
+venv/
+env/
+.venv/
+ENV/
+
+# ---- FastAPI / Uvicorn ----
+*.log
+
+# ---- SQLite databases ----
+*.db
+*.sqlite
+
+# Keep a specific DB if you ever need one versioned:
+# !hyperfocus.db
+
+# ---- VSCode ----
+.vscode/
+*.code-workspace
+
+# ---- Pytest ----
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ---- Docker ----
+*.tar
+*.img
+
+# ---- Git ----
+.git/
+
+# ---- OS-specific ----
+# Windows
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
