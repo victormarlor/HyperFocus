@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuthStore } from '../store/authStore';
+
 import api from '../api/axios';
 import { Card } from '../components/ui';
 import { InsightsWidget } from '../components/features';

@@ -1,31 +1,30 @@
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { Button, Input, Card } from '../components/ui';
 import logo from '../assets/IsotipoHyperfocus.png';
-import { useState, useEffect } from 'react';
+
 
 export default function RegisterPage() {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const { register, handleSubmit, control, formState: { errors } } = useForm();
   const { register: registerUser, isLoading, error } = useAuthStore();
   const navigate = useNavigate();
   
-  const password = watch('password', '');
-  const [strength, setStrength] = useState(0);
-
-  useEffect(() => {
+  const password = useWatch({ control, name: 'password', defaultValue: '' });
+  
+  // Derived state (no need for useState/useEffect)
+  const calculateStrength = (pwd) => {
+    if (!pwd) return 0;
     let score = 0;
-    if (!password) {
-      setStrength(0);
-      return;
-    }
-    if (password.length >= 8) score += 1;
-    if (/[A-Z]/.test(password)) score += 1;
-    if (/[a-z]/.test(password)) score += 1;
-    if (/[0-9]/.test(password)) score += 1;
-    if (/[^A-Za-z0-9]/.test(password)) score += 1;
-    setStrength(score);
-  }, [password]);
+    if (pwd.length >= 8) score += 1;
+    if (/[A-Z]/.test(pwd)) score += 1;
+    if (/[a-z]/.test(pwd)) score += 1;
+    if (/[0-9]/.test(pwd)) score += 1;
+    if (/[^A-Za-z0-9]/.test(pwd)) score += 1;
+    return score;
+  };
+
+  const strength = calculateStrength(password);
 
   const onSubmit = async (data) => {
     if (strength < 5) return; // Enforce max strength
