@@ -51,6 +51,10 @@ app.add_middleware(
 def read_root():
     return {"message": "HyperFocus API is running 🚀"}
 
+@app.get("/healthz", tags=["health"])
+def health_check():
+    return {"status": "ok"}
+
 # Routers
 app.include_router(auth.router, prefix=settings.API_V1_STR, tags=["auth"])
 app.include_router(users.router, prefix=settings.API_V1_STR)
