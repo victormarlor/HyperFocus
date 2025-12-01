@@ -14,12 +14,12 @@ export const useAuthStore = create(
             login: async (email, password) => {
                 set({ isLoading: true, error: null });
                 try {
-                    // 1. Get Token
-                    const formData = new FormData();
-                    formData.append('username', email);
-                    formData.append('password', password);
+                    // 1. Get Token (Use URLSearchParams for application/x-www-form-urlencoded)
+                    const params = new URLSearchParams();
+                    params.append('username', email);
+                    params.append('password', password);
 
-                    const response = await api.post('/login/access-token', formData);
+                    const response = await api.post('/login/access-token', params);
 
                     const { access_token } = response.data;
                     set({ token: access_token, isAuthenticated: true });
@@ -30,8 +30,19 @@ export const useAuthStore = create(
 
                     return true;
                 } catch (error) {
+                    let errorMessage = 'Login failed';
+                    if (error.response?.data?.detail) {
+                        const detail = error.response.data.detail;
+                        // Handle array of errors (validation errors)
+                        if (Array.isArray(detail)) {
+                            errorMessage = detail.map(err => err.msg).join(', ');
+                        } else {
+                            errorMessage = detail;
+                        }
+                    }
+
                     set({
-                        error: error.response?.data?.detail || 'Login failed',
+                        error: errorMessage,
                         isLoading: false,
                         token: null,
                         isAuthenticated: false
